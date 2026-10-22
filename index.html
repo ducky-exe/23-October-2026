@@ -52,7 +52,7 @@ html,body{height:100%;overflow:hidden;background:var(--ink);color:var(--cream);f
 #bar{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:16px;right:16px;display:flex;gap:4px;z-index:9;pointer-events:none}
 #bar b{flex:1;height:3px;border-radius:3px;background:#ffffff33;overflow:hidden}#bar i{display:block;height:100%;width:0;background:var(--cream);transition:width .5s}
 .ui{position:fixed;left:16px;right:16px;bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:8px;z-index:9}
-.ui span{flex:1;font-size:.68rem;letter-spacing:.1em;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ui span{flex:1;min-width:0;font-size:.68rem;line-height:1.3;letter-spacing:.035em;opacity:.86;white-space:normal;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .ui button{width:44px;height:44px;border-radius:50%;border:1px solid #ffffff44;background:#0b050899;color:var(--cream);font-size:1.1rem;cursor:pointer;backdrop-filter:blur(8px)}
 @media(min-width:800px){.s{padding-left:max(24px,calc(50vw - 380px));padding-right:max(24px,calc(50vw - 380px))}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01s!important;animation-delay:0s!important;transition:none!important}}
@@ -65,18 +65,38 @@ html,body{height:100%;overflow:hidden;background:var(--ink);color:var(--cream);f
 const C={
  names:["Tyrell","Smelokuhle"],
  start:"2024-10-23", end:"2026-10-23",           // relationship start + anniversary (YYYY-MM-DD)
- // Music: ONE song per chapter (the 7 bars along the top). Put files in /audio and set src:"audio/ch2.mp3". Empty src = built-in ambient pad, in a different key per chapter.
+ // One song per chapter. Place ch1.mp3 through ch7.mp3 inside the audio/ folder.
+ // Until MP3s are provided, the player falls back to built-in ambient music.
  playlist:[
-  {title:"Ch 1 — add song title",src:""},{title:"Ch 2 — add song title",src:""},{title:"Ch 3 — add song title",src:""},{title:"Ch 4 — add song title",src:""},
-  {title:"Ch 5 — add song title",src:""},{title:"Ch 6 — add song title",src:""},{title:"Ch 7 — add song title",src:""}],
- // Photos: put files in /photos and set src:"photos/1.jpg". Empty src shows a labelled placeholder.
+  {title:"Rain Dance — Dave & Tems",src:"audio/ch1.mp3"}, // Chapter 1: Homepage
+  {title:"Me and You — Tems",src:"audio/ch2.mp3"}, // Chapter 2: Our Story Began
+  {title:"Eh Joh — Sam Deep",src:"audio/ch3.mp3"}, // Chapter 3: Two Years / Wrapped
+  {title:"Shela — Sam Deep",src:"audio/ch4.mp3"}, // Chapter 4: Relationship Wrapped Awards
+  {title:"Distant Lover — Marvin Gaye",src:"audio/ch5.mp3"}, // Chapter 5: The Memories
+  {title:"Ordinary — Alex Warren",src:"audio/ch6.mp3"}, // Chapter 6: My Favourite Person
+  {title:"Sure Thing (Slowed) — Miguel",src:"audio/ch7.mp3"} // Chapter 7: Finale
+ ],
+ // Photos: filenames match the photo number: 1.jpg is photos[0], 13.jpg is photos[12].
+ // Put all numbered JPG files inside the /photos folder (next to index.html).
+ // Chapter 2 uses 1–5; Chapter 4 uses 7–10; Chapter 5 full-screen memories use 11–12.
+ // Chapter 6 + the finale use 6. The Chapter 5 collage uses 1, 13, and 3 in that order.
  photos:[
-  {src:"",cap:"SAMPLE caption — where this was",date:"Add date",note:"Add a short personal note."},
-  {src:"",cap:"SAMPLE caption two",date:"Add date",note:"Add a note."},
-  {src:"",cap:"SAMPLE caption three",date:"Add date",note:""},
-  {src:"",cap:"Mall of the South",date:"29 January 2026",note:"Take me back right now!!"},
-  {src:"",cap:"Home Visit",date:"6 April 2026",note:"Meet-up gone wrong, but we made the best of it!"},
-  {src:"",cap:"Sky City Visit",date:"11 July 2026",note:"Don’t mind me in the background, just admire this masterpiece God took His time creating. 😮‍💨❤️"}],
+  {src:"photos/1.jpg",cap:"How It All Started",date:"23 October 2024",note:""},
+  {src:"photos/2.jpg",cap:"A Day We’ll Never Forget",date:"27 September 2024",note:""},
+  {src:"photos/3.jpg",cap:"First Date, Kinda… — Gold Reef City",date:"",note:""},
+  {src:"photos/4.jpg",cap:"Early Favourites — Prize Giving",date:"December 2024",note:""},
+  {src:"photos/5.jpg",cap:"Core Memory — Matric Dance ’25",date:"2025",note:""},
+  {src:"photos/6.jpg",cap:"Sky City Visit",date:"11 July 2026",note:"Don’t mind me in the background, just admire this masterpiece God took His time creating. 😮‍💨❤️"},
+  {src:"photos/7.jpg",cap:"The Human Comfort Blanket Award",date:"",note:""},
+  {src:"photos/8.jpg",cap:"The Biggest Softie",date:"",note:""},
+  {src:"photos/9.jpg",cap:"Cutest Unplanned Moment",date:"",note:""},
+  {src:"photos/10.jpg",cap:"Most Iconic Couple Moment",date:"",note:""},
+  {src:"photos/11.jpg",cap:"Mall of the South",date:"29 January 2026",note:"Take me back right now!!"},
+  {src:"photos/12.jpg",cap:"Home Visit",date:"6 April 2026",note:"Meet-up gone wrong, but we made the best of it!"},
+  {src:"photos/13.jpg",cap:"Chapter 5 Collage — Special Photo",date:"",note:""}],
+ // The opening collage has 3 picture slots. Numbers here are 0-based photo indices:
+ // 0 = 1.jpg (first), 12 = 13.jpg (second / dedicated photo), 2 = 3.jpg (third).
+ collagePhotos:[0,12,2],
  story:[ // SAMPLE placeholders — replace with real moments
   {k:"How it all started",t:"23 October 2024: Royal Schools Sky City",c:"It started at Royal Schools, Sky City… 👀 Imagine: from February she’d been liking me, I took my sweet time, and on 23 October 2024 we finally became the plot."},
   {k:"A day we’ll never forget",t:"27 September 2024",c:"Just two people on an outing… pretending we didn’t have feelings for each other. 😭❤️ Little did we know! 👀"},
@@ -84,16 +104,20 @@ const C={
   {k:"Early favourites",t:"A picture from Prize Giving",c:"Two months in, and already collecting favourite pictures. 🥹❤️ December 2024!"},
   {k:"Core memory",t:"Matric Dance ’25",c:"Our first “wedding” together! 😭💍 We didn’t come to play; we came to EAT. 🔥❤️"}],
  mine:[["Favourite shared activity","SAMPLE"],["Most-used nickname","Mountain Dew / Tyrell-ski"],["Favourite pictures","SAMPLE #"],["Most memorable date","Rosebank Mall"],["Most-used phrase","SAMPLE"],["Funniest moment","Our FaceTime moments"]],
- awards:[ // SAMPLE answers — replace
-  {t:"The Human Comfort Blanket Award",a:"Smelokuhle 😝😝😝"},{t:"The Biggest Softie",a:"Tyrell (this one is self-explanatory 😭)"},
-  {t:"Most likely to cry at a movie",a:"Smelokuhle (she did, by the way: Spider-Man: Brand New Day!)"},{t:"Cutest unplanned moment",a:"Rand Steam KFC mini-date"},{t:"Most iconic couple moment",a:"MD ’25, definitely!!"}],
+ awards:[ // Chapter 4: each award chooses its photo explicitly (0-based index).
+  // The Human Comfort Blanket and Most Likely to Cry intentionally share photo 7.jpg.
+  {t:"The Human Comfort Blanket Award",a:"Smelokuhle 😝😝😝",photo:6},
+  {t:"The Biggest Softie",a:"Tyrell (this one is self-explanatory 😭)",photo:7},
+  {t:"Most likely to cry at a movie",a:"Smelokuhle (she did, by the way: Spider-Man: Brand New Day!)",photo:6},
+  {t:"Cutest unplanned moment",a:"Rand Steam KFC mini-date",photo:8},
+  {t:"Most iconic couple moment",a:"MD ’25, definitely!!",photo:9}],
  message:"Time flies when you’re in love!!\nMy love, we really hit 2 years so fast. I remember 23 October 2024 like it was yesterday! 😭\nI would like to thank you for being in my life and for the major role you play in it, especially the way you love! There is nothing more I could ask for because I have everything: I have YOU! Though difficulties creep in, we’ve made it through and come this far. Thank you for listening to me and for always rooting for me!!! ❤️\nI LOVE YOU!!! ❤️❤️❤️",
  special:["You love deeply and wholeheartedly, in ways words can’t explain. ❤","You are my number one supporter, always motivating and uplifting me.","You never give up on us; although things get tough, you keep fighting for our love. ❤"]
 };
 /* ============ ENGINE ============ */
 const $=s=>document.querySelector(s),G=["linear-gradient(135deg,#ff2d87,#7a2cff)","linear-gradient(135deg,#ff8a1f,#ff2d87)","linear-gradient(135deg,#7a2cff,#3a0a1e)","linear-gradient(135deg,#ff5a4d,#3a0a1e)"];
 const D=Math.round((new Date(C.end)-new Date(C.start))/864e5),M=(new Date(C.end).getFullYear()-new Date(C.start).getFullYear())*12+new Date(C.end).getMonth()-new Date(C.start).getMonth();
-const ph=(i,c='',w=0)=>{const p=C.photos[i%C.photos.length];return `<figure class="ph ${c}" style="--g:${G[i%4]}">${p.src?`<img src="${p.src}" alt="${p.cap}" loading="lazy" onerror="this.remove()">`:''}<figcaption>${p.src?'':'PLACEHOLDER PHOTO'}</figcaption></figure>`};
+const ph=(i,c='',extraStyle='')=>{const p=C.photos[i%C.photos.length];return `<figure class="ph ${c}" style="--g:${G[i%4]};${extraStyle}">${p.src?`<img src="${p.src}" alt="${p.cap}" loading="lazy" onerror="this.nextElementSibling.textContent='PLACEHOLDER PHOTO';this.remove()">`:''}<figcaption>${p.src?'':'PLACEHOLDER PHOTO'}</figcaption></figure>`};
 const N=C.names,S=[];
 S.push({ch:0,lock:1,bg:"radial-gradient(60% 45% at 25% 25%,#7a2cffaa,transparent),radial-gradient(60% 45% at 80% 75%,#ff2d87aa,transparent),#0b0508",
  html:`<div class="orb"></div><p class="k">${N[0]} + ${N[1]}</p><h1 class="big grad">Love<br>Replay</h1><p class="k">2024 — 2026</p><p class="lead">Two years. A million memories. One love story.</p><button class="cta" id="go">TAP TO RELIVE US ♥</button>`,
@@ -104,14 +128,14 @@ const wk=D/7,st=[["Together for",M/12,"Years","linear-gradient(150deg,#7a2cff,#f
 st.forEach(a=>S.push({ch:2,bg:a[3],fg:a[4],html:`<p class="k">Chapter 3 · Two years, by the numbers</p><p class="sm">${a[0]}</p><div class="num" data-n="${a[1]}">0</div><h2 class="mid">${a[2]}</h2>`,on:cnt}));
 S.push({ch:2,bg:"linear-gradient(160deg,#0b0508,#3a0a1e)",html:`<p class="k">Chapter 3 · Just ours</p><h2 class="mid">Our <span class="grad">Wrapped</span></h2><div class="grid">${C.mine.map(m=>`<div><b>${m[0]}</b>${m[1]}</div>`).join('')}</div>`});
 const aw=[["#ff2d87","#0b0508"],["#ff8a1f","#0b0508"],["#7a2cff","#fff3e6"],["#ff5a4d","#0b0508"],["linear-gradient(150deg,#ff2d87,#7a2cff)","#fff3e6"]];
-C.awards.forEach((a,i)=>S.push({ch:3,bg:aw[i][0],fg:aw[i][1],html:`<p class="k">Chapter 4 · Relationship Wrapped · ${i+1}/${C.awards.length}</p><div class="stk"><h2 class="mid">${a.t}</h2></div>${ph(i+2,'pol sm r1')}<p class="ans">${a.a}</p>`}));
+C.awards.forEach((a,i)=>S.push({ch:3,bg:aw[i][0],fg:aw[i][1],html:`<p class="k">Chapter 4 · Relationship Wrapped · ${i+1}/${C.awards.length}</p><div class="stk"><h2 class="mid">${a.t}</h2></div>${ph(a.photo,'pol sm r1')}<p class="ans">${a.a}</p>`}));
 const cin=i=>{const p=C.photos[i];return `${ph(i,'full')}<div class="shade"></div><div class="cin"><p class="k">${p.date}</p><h2>${p.cap}</h2><p>${p.note}</p></div>`};
-S.push({ch:4,bg:"#0b0508",html:`<p class="k">Chapter 5 · The memories</p><div class="col"><div style="left:0;top:0;width:58%;transform:rotate(-5deg)" class="ph" ><span></span></div></div>`,on(e){const c=e.querySelector('.col');c.innerHTML=[0,1,2].map(i=>ph(i,'').replace('class="ph "',`class="ph" style="--g:${G[i]};width:${[58,52,48][i]}%;aspect-ratio:4/5;left:${[0,40,12][i]}%;top:${[0,12,34][i]}%;transform:rotate(${[-5,4,-2][i]}deg)"`).replace('style="--g:'+G[i]+'"','')).join('')}});
-S.push({ch:4,bg:"#0b0508",cls:"slow",html:cin(3)},{ch:4,bg:"#0b0508",cls:"slow",html:cin(4)});
+S.push({ch:4,bg:"#0b0508",html:`<p class="k">Chapter 5 · The memories</p><div class="col"><div style="left:0;top:0;width:58%;transform:rotate(-5deg)" class="ph" ><span></span></div></div>`,on(e){const c=e.querySelector('.col');c.innerHTML=C.collagePhotos.map((photoIndex,slot)=>ph(photoIndex,'',`width:${[58,52,48][slot]}%;aspect-ratio:4/5;left:${[0,40,12][slot]}%;top:${[0,12,34][slot]}%;transform:rotate(${[-5,4,-2][slot]}deg)`)).join('')}});
+S.push({ch:4,bg:"#0b0508",cls:"slow",html:cin(10)},{ch:4,bg:"#0b0508",cls:"slow",html:cin(11)});
 S.push({ch:5,cls:"slow long",bg:"radial-gradient(70% 50% at 50% 30%,#ff9ab855,transparent),linear-gradient(#4a0f2e,#1a0510)",fg:"#f6e3d2",html:`<p class="k">Chapter 6 · My favourite person</p><p class="msg">${C.message.replace(/\n/g,'<br><br>')}</p><p class="script">— ${N[0]}</p>`},
  {ch:5,cls:"slow",bg:"linear-gradient(#2a0a24,#1a0510)",fg:"#f6e3d2",html:`<p class="k">What makes you, you</p>${C.special.map((t,i)=>`<p class="script fin" style="--d:${.6+i*1.4}s">${t}</p>`).join('')}`},
  {ch:5,cls:"slow",bg:"#1a0510",html:cin(5)});
-S.push({ch:6,cls:"slow",bg:"radial-gradient(60% 40% at 50% 40%,#7a2cff66,transparent),#0b0508",html:`<div class="glow"></div>${ph(5,'full').replace('class="ph full"','class="ph full" style="opacity:.28"')}<p class="lead fin" style="--d:1s">If I had to choose all over again…</p><h1 class="big grad fin" style="--d:4s">I’d still choose you.</h1><p class="lead fin" style="--d:7.5s">Happy 2 years, ${N[1]}.</p><p class="script fin" style="--d:9.5s">With love, ${N[0]} ♥</p><button class="cta fin" style="--d:12s" id="rp">REPLAY OUR STORY</button>`,on(){$('#rp').onclick=()=>go(0)}});
+S.push({ch:6,cls:"slow",bg:"radial-gradient(60% 40% at 50% 40%,#7a2cff66,transparent),#0b0508",html:`<div class="glow"></div>${ph(5,'full','opacity:.28')}<p class="lead fin" style="--d:1s">If I had to choose all over again…</p><h1 class="big grad fin" style="--d:4s">I’d still choose you.</h1><p class="lead fin" style="--d:7.5s">Happy 2 years, ${N[1]}.</p><p class="script fin" style="--d:9.5s">With love, ${N[0]} ♥</p><button class="cta fin" style="--d:12s" id="rp">REPLAY OUR STORY</button>`,on(){$('#rp').onclick=()=>go(0)}});
 function cnt(e){e.querySelectorAll('[data-n]').forEach(n=>{const v=+n.dataset.n,f=Number.isInteger(v)?0:1,red=matchMedia('(prefers-reduced-motion:reduce)').matches,t0=performance.now();(function r(t){const k=red?1:Math.min((t-t0)/1600,1),x=v*(1-Math.pow(1-k,3));n.textContent=x.toLocaleString('en',{minimumFractionDigits:f,maximumFractionDigits:f});k<1&&requestAnimationFrame(r)})(t0)})}
 let cur=0,started=0;const bar=$('#bar'),stage=$('#stage');
 for(let c=0;c<7;c++)bar.innerHTML+='<b><i></i></b>';
@@ -124,14 +148,14 @@ addEventListener('pointerup',e=>{if(e.target.closest('button,.ui')||px==null)ret
 addEventListener('keydown',e=>{if(e.target.closest('button'))return;if(e.key=='ArrowRight'||e.key==' ')nav(1);if(e.key=='ArrowLeft')nav(-1)});
 /* ============ MUSIC (real audio: your file, or built-in ambient pad) ============ */
 const Mu={a:null,x:null,g:null,play:0,mute:0,syn:0,ch:-1},R=[1,1.122,1.26,1.335,.944,.841,1];
-function label(){const t=C.playlist[Math.max(Mu.ch,0)]||{};$('#trk').textContent='♪ '+(started?(t.title||'Ambient')+' · '+(Mu.play?'playing':'paused')+(Mu.mute?' · muted':''):'Tap to start music');$('#pp').textContent=Mu.play?'❚❚':'▶';$('#pp').setAttribute('aria-label',Mu.play?'Pause music':'Play music');$('#mu').textContent=Mu.mute?'✕':'♪';$('#mu').setAttribute('aria-label',Mu.mute?'Unmute':'Mute')}
+function label(){const t=C.playlist[Math.max(Mu.ch,0)]||{};$('#trk').textContent='♪ '+(t.title||'Ambient')+(started?' · '+(Mu.play?'playing':'paused')+(Mu.mute?' · muted':''):' · tap ▶ to play');$('#pp').textContent=Mu.play?'❚❚':'▶';$('#pp').setAttribute('aria-label',Mu.play?'Pause music':'Play music');$('#mu').textContent=Mu.mute?'✕':'♪';$('#mu').setAttribute('aria-label',Mu.mute?'Unmute':'Mute')}
 function synth(){if(!Mu.x){try{const x=Mu.x=new(window.AudioContext||webkitAudioContext)(),g=Mu.g=x.createGain();g.gain.value=0;g.connect(x.destination);const ch=[[220,277.2,329.6],[196,246.9,293.7],[174.6,220,261.6],[196,246.9,293.7]];let i=0;Mu.pl=()=>{if(x.state!='running'||!Mu.syn)return;const r=R[Math.max(Mu.ch,0)];ch[i++%4].forEach(f=>{const o=x.createOscillator(),e=x.createGain(),t=x.currentTime;o.frequency.value=f*r;o.connect(e);e.connect(g);e.gain.setValueAtTime(0,t);e.gain.linearRampToValueAtTime(.1,t+2);e.gain.linearRampToValueAtTime(0,t+6.5);o.start(t);o.stop(t+7)})};setInterval(Mu.pl,5000)}catch(_){return}}Mu.play&&Mu.x.state=='suspended'&&Mu.x.resume();Mu.g.gain.setTargetAtTime(Mu.mute?0:.8,Mu.x.currentTime,.6);Mu.pl()}
 function fade(a,to,cb){const s=a.volume,t0=performance.now();(function r(t){const k=Math.min((t-t0)/1200,1);a.volume=s+(to-s)*k;k<1?requestAnimationFrame(r):cb&&cb()})(t0)}
 function useSyn(){Mu.syn=1;synth();label()}
 function setTrack(c){if(!started||c===Mu.ch)return;Mu.ch=c;const old=Mu.a,t=C.playlist[c]||{};if(old)fade(old,0,()=>old.pause());Mu.a=null;Mu.syn=0;Mu.g&&Mu.g.gain.setTargetAtTime(0,Mu.x.currentTime,.6);
  if(!t.src)useSyn();else{const a=Mu.a=new Audio(t.src),bad=()=>{if(Mu.a===a){Mu.a=null;useSyn()}};a.loop=true;a.volume=0;a.muted=Mu.mute;a.onerror=bad;Mu.play&&a.play().then(()=>fade(a,1)).catch(bad)}label()}
 function start(){if(!started){started=1;Mu.play=1}go(1)}
-$('#pp').onclick=()=>{if(!started)return;Mu.play=!Mu.play;if(Mu.a)Mu.play?Mu.a.play().then(()=>fade(Mu.a,1)).catch(()=>{}):Mu.a.pause();if(Mu.x)Mu.play?Mu.x.resume():Mu.x.suspend();label()};
+$('#pp').onclick=()=>{if(!started){started=1;Mu.play=1;setTrack(0);label();return}Mu.play=!Mu.play;if(Mu.a)Mu.play?Mu.a.play().then(()=>fade(Mu.a,1)).catch(()=>{}):Mu.a.pause();if(Mu.x)Mu.play?Mu.x.resume():Mu.x.suspend();label()};
 $('#mu').onclick=()=>{Mu.mute=!Mu.mute;Mu.a&&(Mu.a.muted=Mu.mute);Mu.g&&Mu.g.gain.setTargetAtTime(Mu.mute||!Mu.syn?0:.8,Mu.x.currentTime,.1);label()};
 go(0);label();
 </script></body></html>
