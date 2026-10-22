@@ -34,6 +34,12 @@ html,body{height:100%;overflow:hidden;background:var(--ink);color:var(--cream);f
 .orb:after{left:0;transform:rotate(45deg);transform-origin:100% 100%;background:linear-gradient(var(--tang),var(--pink))}
 .p{position:absolute!important;width:6px;height:6px;border-radius:50%;background:var(--cream);opacity:.5;animation:fl 5s ease-in-out infinite!important;z-index:1!important}
 .num{font:800 clamp(5rem,32vw,14rem)/.8 var(--d);letter-spacing:-.06em}
+/* Chapter 3: a tiny, playful minus-one appears only after the day count finishes. */
+.day-count{display:inline-flex;align-items:flex-start;gap:clamp(4px,1vw,10px);max-width:100%;white-space:nowrap}
+.day-count .day-footnote{display:inline-flex;align-items:center;gap:.14em;font:800 clamp(.95rem,4.9vw,1.6rem)/1 var(--d);letter-spacing:0;white-space:nowrap;opacity:0;transform:translateY(-.25em);transition:opacity .38s ease}
+.day-count.count-complete .day-footnote{opacity:1}
+.day-count .day-footnote .cry{font-size:1.1em}
+@media(prefers-reduced-motion:reduce){.day-count .day-footnote{transition:none}}
 .ph{position:relative;margin:0;background:var(--g);border-radius:6px;overflow:hidden;display:flex;align-items:flex-end}
 .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ph figcaption{position:relative;font-size:.6rem;letter-spacing:.18em;font-weight:800;padding:8px;opacity:.85}
@@ -103,7 +109,7 @@ const C={
   {k:"First date, kinda…",t:"Gold Reef City",c:"Not technically our first date… 👀 Just a friends’ outing that turned into another core memory. ❤️😂"},
   {k:"Early favourites",t:"A picture from Prize Giving",c:"Two months in, and already collecting favourite pictures. 🥹❤️ December 2024!"},
   {k:"Core memory",t:"Matric Dance ’25",c:"Our first “wedding” together! 😭💍 We didn’t come to play; we came to EAT. 🔥❤️"}],
- mine:[["Favourite shared activity","SAMPLE"],["Most-used nickname","Mountain Dew / Tyrell-ski"],["Favourite pictures","SAMPLE #"],["Most memorable date","Rosebank Mall"],["Most-used phrase","SAMPLE"],["Funniest moment","Our FaceTime moments"]],
+ mine:[["Favourite shared activity","Spending quality time together"],["Most-used nickname","Mountain Dew / Tyrell-ski"],["Favourite pictures","ERROR: Unquantifiable — she’s too gorgeous for just one favourite picture. ❤️"],["Most memorable date","Rosebank (bowling, arcade, and photo booth)"],["Most-used phrase","“babyyyyy”"],["Funniest moment","Our FaceTime moments"]],
  awards:[ // Chapter 4: each award chooses its photo explicitly (0-based index).
   // The Human Comfort Blanket and Most Likely to Cry intentionally share photo 7.jpg.
   {t:"The Human Comfort Blanket Award",a:"Smelokuhle 😝😝😝",photo:6},
@@ -130,7 +136,7 @@ S.push({ch:0,lock:1,bg:"radial-gradient(60% 45% at 25% 25%,#7a2cffaa,transparent
 C.story.forEach((m,i)=>S.push({ch:1,bg:`linear-gradient(160deg,${['#3a0a1e','#2a0a3e','#4a0f1a','#240a3a','#3a0a1e'][i]},#0b0508)`,
  html:`<p class="k">Chapter 2 · Our story began</p>${ph(i,'pol r'+i%2)}<h2 class="mid">${m.k}</h2><p class="sm">${m.t}</p><p class="cap">${m.c}${i?'':'<br><br><span class="k">Tap right · left to go back</span>'}</p>`}));
 const wk=D/7,st=[["Together for",M/12,"Years","linear-gradient(150deg,#7a2cff,#ff2d87)","#fff3e6"],["That’s",M,"Months of love","linear-gradient(150deg,#ff5a4d,#ff8a1f)","#0b0508"],["About",wk,"Weeks","linear-gradient(150deg,#ff2d87,#3a0a1e)","#fff3e6"],["Exactly",D,"Days","linear-gradient(150deg,#ff8a1f,#ff5a4d)","#0b0508"],["Or roughly",D*24,"Hours","linear-gradient(150deg,#0b0508,#7a2cff)","#fff3e6"]];
-st.forEach(a=>S.push({ch:2,bg:a[3],fg:a[4],html:`<p class="k">Chapter 3 · Two years, by the numbers</p><p class="sm">${a[0]}</p><div class="num" data-n="${a[1]}">0</div><h2 class="mid">${a[2]}</h2>`,on:cnt}));
+st.forEach(a=>S.push({ch:2,bg:a[3],fg:a[4],html:`<p class="k">Chapter 3 · Two years, by the numbers</p><p class="sm">${a[0]}</p>${a[2]==='Days'?`<div class="num day-count" data-n="${a[1]}"><span class="count-value">0</span><span class="day-footnote" aria-label="minus one, crying emoji">−1 <span class="cry" aria-hidden="true">😭</span></span></div>`:`<div class="num" data-n="${a[1]}">0</div>`}<h2 class="mid">${a[2]}</h2>`,on:cnt}));
 S.push({ch:2,bg:"linear-gradient(160deg,#0b0508,#3a0a1e)",html:`<p class="k">Chapter 3 · Just ours</p><h2 class="mid">Our <span class="grad">Wrapped</span></h2><div class="grid">${C.mine.map(m=>`<div><b>${m[0]}</b>${m[1]}</div>`).join('')}</div>`});
 const aw=[["#ff2d87","#0b0508"],["#ff8a1f","#0b0508"],["#7a2cff","#fff3e6"],["#ff5a4d","#0b0508"],["linear-gradient(150deg,#ff2d87,#7a2cff)","#fff3e6"]];
 C.awards.forEach((a,i)=>S.push({ch:3,bg:aw[i][0],fg:aw[i][1],html:`<p class="k">Chapter 4 · Relationship Wrapped · ${i+1}/${C.awards.length}</p><div class="stk"><h2 class="mid">${a.t}</h2></div>${ph(a.photo,'pol sm r1')}<p class="ans">${a.a}</p>`}));
@@ -141,7 +147,7 @@ S.push({ch:5,cls:"slow long",bg:"radial-gradient(70% 50% at 50% 30%,#ff9ab855,tr
  {ch:5,cls:"slow",bg:"linear-gradient(#2a0a24,#1a0510)",fg:"#f6e3d2",html:`<p class="k">What makes you, you</p>${C.special.map((t,i)=>`<p class="script fin" style="--d:${.6+i*1.4}s">${t}</p>`).join('')}`},
  {ch:5,cls:"slow",bg:"#1a0510",html:cin(5)});
 S.push({ch:6,cls:"slow",bg:"radial-gradient(60% 40% at 50% 40%,#7a2cff66,transparent),#0b0508",html:`<div class="glow"></div>${ph(5,'full','opacity:.28')}<p class="lead fin" style="--d:1s">If I had to choose all over again…</p><h1 class="big grad fin" style="--d:4s">I’d still choose you.</h1><p class="lead fin" style="--d:7.5s">Happy 2 years, ${N[1]}.</p><p class="script fin" style="--d:9.5s">With love, ${N[0]} ♥</p><button class="cta fin" style="--d:12s" id="rp">REPLAY OUR STORY</button>`,on(){$('#rp').onclick=()=>go(0)}});
-function cnt(e){e.querySelectorAll('[data-n]').forEach(n=>{const v=+n.dataset.n,f=Number.isInteger(v)?0:1,red=matchMedia('(prefers-reduced-motion:reduce)').matches,t0=performance.now();(function r(t){const k=red?1:Math.min((t-t0)/1600,1),x=v*(1-Math.pow(1-k,3));n.textContent=x.toLocaleString('en',{minimumFractionDigits:f,maximumFractionDigits:f});k<1&&requestAnimationFrame(r)})(t0)})}
+function cnt(e){e.querySelectorAll('[data-n]').forEach(n=>{const v=+n.dataset.n,f=Number.isInteger(v)?0:1,red=matchMedia('(prefers-reduced-motion:reduce)').matches,t0=performance.now(),display=n.querySelector('.count-value')||n;(function r(t){const k=red?1:Math.min((t-t0)/1600,1),x=v*(1-Math.pow(1-k,3));display.textContent=x.toLocaleString('en',{minimumFractionDigits:f,maximumFractionDigits:f});if(k<1)requestAnimationFrame(r);else n.classList.add('count-complete')})(t0)})}
 let cur=0,started=0;const bar=$('#bar'),stage=$('#stage');
 for(let c=0;c<7;c++)bar.innerHTML+='<b><i></i></b>';
 function go(n){n=Math.max(0,Math.min(S.length-1,n));if(n===cur&&stage.children.length)return;const s=S[n];cur=n;const e=document.createElement('section');e.className='s '+(s.cls||'');e.style.background=s.bg;e.style.color=s.fg||'var(--cream)';e.innerHTML=s.html;stage.insertBefore(e,$('#stage').firstChild&&null);stage.append(e);s.on&&s.on(e);setTrack(s.ch);
